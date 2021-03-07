@@ -1,0 +1,5 @@
+C:\\server\\DataBase\\usersData.txt
+C:\\server\\DataBase\\gamesData.txt
+C:\\server\\DataBase\\gameFiles
+10.0.0.4
+80
