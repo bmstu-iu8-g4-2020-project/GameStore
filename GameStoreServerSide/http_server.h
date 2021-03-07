@@ -8,7 +8,7 @@ class http_server : public QTcpServer
 {
     Q_OBJECT
 public:
-    http_server(quint16 port, QHostAddress address, QObject* parent);
+    http_server(QObject* parent);
     void incomingConnection(qintptr socket);
     void pause();
     void resume();

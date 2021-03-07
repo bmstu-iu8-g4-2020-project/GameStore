@@ -13,13 +13,8 @@
 #include "http_connection.h"
 
 
-const std::string http_connection::users_filename = "C:\\Users\\fedor\\source\\repos\\Game Store GUI\\Game Store GUI\\DataBase\\usersData.txt";
-const std::string http_connection::games_filename = "C:\\Users\\fedor\\source\\repos\\Game Store GUI\\Game Store GUI\\DataBase\\gamesData.txt";
-const std::string http_connection::directory_with_games = "C:\\Users\\fedor\\source\\repos\\Game Store GUI\\Game Store GUI\\DataBase\\gameFiles";
-
-
 http_connection::http_connection() {
-	server_ip_address = "13.69.21.71";
+	server_ip_address = "13.69.21.71";// 13.69.21.71 127.0.0.1
 	port = 80;
 	data = "";
 }
@@ -114,50 +109,7 @@ bool http_connection::createGame(const std::string name, const std::string descr
 
 	return false;
 }
-void http_connection::addGameFiles(const std::string name, const std::filesystem::path directory_with_files)
-{
-	/*data.clear();
 
-	QTimer tim;
-	tim.setInterval(10000);
-	tim.setSingleShot(true);
-
-	QByteArray req_data = "getUserPassword\r\n1\r\n" + QByteArray(name.c_str());
-	QNetworkAccessManager http_client;
-	QNetworkReply* http_response = http_client.post(QNetworkRequest(QUrl("http://" + server_ip_address + ":" + QString::number(port) + "/")), req_data);
-	if (http_response == nullptr) {
-		QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Ошибка подключения"), QMessageBox::NoButton).exec();
-		return;
-	}
-
-	QEventLoop loop;
-	connect(&tim, &QTimer::timeout, &loop, &QEventLoop::quit);
-	connect(http_response, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-	tim.start();
-	loop.exec();
-	if (tim.isActive()) {
-		tim.stop();
-		if (http_response->error() != QNetworkReply::NoError) {
-			QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), http_response->errorString(), QMessageBox::NoButton).exec();
-
-			http_response->deleteLater();
-			return;
-		}
-		int http_status = http_response->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-		if (http_status == 200)
-			data = http_response->readAll();
-
-		http_response->deleteLater();
-		return;
-	}
-	disconnect(http_response, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-	http_response->abort();
-
-	http_response->deleteLater();
-
-	return;*/
-}
 
 // get Game ______
 std::set<std::string> http_connection::getAllGames()
@@ -349,7 +301,7 @@ std::string http_connection::getGamePrice(const std::string name)
 std::set<std::string> http_connection::getAllUsers()
 {
 	data.clear();
-
+		
 	QTimer tim;
 	tim.setInterval(10000);
 	tim.setSingleShot(true);
@@ -395,6 +347,7 @@ std::set<std::string> http_connection::getAllUsers()
 
 	http_response->deleteLater();
 
+	QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Сервер не отвечает"), QMessageBox::NoButton).exec();
 	return std::set<std::string>();
 }
 std::string http_connection::getUserPassword(const std::string name)
@@ -769,7 +722,7 @@ void http_connection::updateGamePrice(const std::string name, const double new_g
 	tim.setSingleShot(true);
 
 	QNetworkAccessManager http_client;
-	QByteArray req_data = "updateGamePrice\r\n2\r\n" + QByteArray(name.c_str()) + "\r\n" + QByteArray(std::to_string(new_game_price).c_str());
+	QByteArray req_data = "updateGamePrice\r\n2\r\n" + QByteArray(name.c_str()) + "\r\n" + QByteArray::number(new_game_price, 'f', 2);
 	QNetworkReply* http_response = http_client.post(QNetworkRequest(QUrl("http://" + server_ip_address + ":" + QString::number(port) + "/")), req_data);
 	if (http_response == nullptr) {
 		QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Ошибка подключения"), QMessageBox::NoButton).exec();
@@ -802,48 +755,7 @@ void http_connection::updateGamePrice(const std::string name, const double new_g
 
 	http_response->deleteLater();
 }
-void http_connection::removeGameFiles(const std::string name, const std::string directory_with_game)
-{
-	/*data.clear();
 
-	QTimer tim;
-	tim.setInterval(10000);
-	tim.setSingleShot(true);
-
-	QNetworkAccessManager http_client;
-	QByteArray data = "removeGameFiles\r\n1\r\n" + QByteArray(name.c_str());
-	QNetworkReply* http_response = http_client.post(QNetworkRequest(QUrl("http://" + server_ip_address + ":" + QString::number(port) + "/")), data);
-	if (http_response == nullptr) {
-		QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Ошибка подключения"), QMessageBox::NoButton).exec();
-		return;
-	}
-
-	QEventLoop loop;
-	connect(&tim, &QTimer::timeout, &loop, &QEventLoop::quit);
-	connect(http_response, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-	tim.start();
-	loop.exec();
-	if (tim.isActive()) {
-		tim.stop();
-		if (http_response->error() != QNetworkReply::NoError) {
-			QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), http_response->errorString(), QMessageBox::NoButton).exec();
-
-			http_response->deleteLater();
-			return;
-		}
-		int http_status = http_response->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-		if (http_status == 200)
-			data = http_response->readAll();
-
-		http_response->deleteLater();
-		return;
-	}
-	disconnect(http_response, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-	http_response->abort();
-
-	http_response->deleteLater();*/
-}
 
 // updete User _____
 void http_connection::updateUserName(const std::string name, const std::string new_name)

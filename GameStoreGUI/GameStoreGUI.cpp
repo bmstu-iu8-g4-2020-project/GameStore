@@ -4,7 +4,6 @@
 #include "EditGameDialog.h"
 #include "PresentGameDialog.h"
 #include "UpdateBalanceDialog.h"
-#include "AddGameFiles.h"
 #include "sha256.h"
 #include <cstdlib>
 #include <QObject>
@@ -54,8 +53,6 @@ GameStoreGUI::GameStoreGUI(QWidget *parent)
 			QObject::connect(elem, &QAction::triggered, this, &GameStoreGUI::click_update_game);
 		else if (elem->text() == L"Добавить игру")
 			QObject::connect(elem, &QAction::triggered, this, &GameStoreGUI::click_create_game);
-		else if (elem->text() == L"Добавить файлы игры")
-			QObject::connect(elem, &QAction::triggered, this, &GameStoreGUI::click_add_files);
 	}
 
 	QObject::connect(ui.btn_Login, &QPushButton::clicked, this, &GameStoreGUI::login);
@@ -145,10 +142,10 @@ void GameStoreGUI::click_create_user() {
 	CreateUserDialog win(this, &conn);
 	if (win.exec() == QDialog::Accepted) {}
 }
-void GameStoreGUI::click_add_files() {
+/*void GameStoreGUI::click_add_files() {
 	AddGameFiles win(this, &conn);
 	if (win.exec() == QDialog::Accepted) {}
-}
+}*/
 void GameStoreGUI::click_Present() {
 	PresentGameDialog win(this, &conn);
 	if (win.exec() == QDialog::Accepted) {}
@@ -167,7 +164,8 @@ void GameStoreGUI::game_selected(QListWidgetItem* item) {
 
 	s_game = item->text().toStdString();
 }
-void GameStoreGUI::click_open() {
+
+void GameStoreGUI::click_open() {/*
 	QProcess GameProc;
 
 	std::set<std::string> All_Games = conn.getUserGames(ui.lbl_UserName->text().toStdString());
@@ -176,8 +174,9 @@ void GameStoreGUI::click_open() {
 			GameProc.start(QString((http_connection::directory_with_games + "\\" + s_game + "\\" + s_game + ".exe").c_str()), QStringList());
 			return;
 		}
-	QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Сначала купите игру!"), QMessageBox::NoButton, this).exec();
+	QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Сначала купите игру!"), QMessageBox::NoButton, this).exec();*/
 }
+
 void GameStoreGUI::click_buy() {
 	std::set<std::string> All_Games = conn.getUserGames(ui.lbl_UserName->text().toStdString());
 	for (std::string Game : All_Games)

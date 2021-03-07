@@ -2,9 +2,30 @@
 #include <QTcpSocket>
 #include <cstring>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 
-http_server::http_server(quint16 port, QHostAddress address, QObject* parent) : QTcpServer(parent), disabled(false) {
+http_server::http_server(QObject* parent) : QTcpServer(parent), disabled(false) {
+    quint16 port = 80;
+    QHostAddress address("10.0.0.4");
+
+    std::string line;
+    std::ifstream settings("settings.txt");
+    if (!settings.is_open())
+        throw std::exception("file settings is not open");
+
+    std::getline(settings, line);
+    std::getline(settings, line);
+    std::getline(settings, line);
+    std::getline(settings, line);
+    if (line.size() > 0)
+        address = QString(line.c_str());
+    std::getline(settings, line);
+    if (line.size() > 0)
+        port = QString(line.c_str()).toUInt();
+    settings.close();
+
     listen(address, port);
 }
 void http_server::incomingConnection(qintptr socket) {

@@ -12,8 +12,6 @@
 class http_connection : public QObject{
 	Q_OBJECT
 private:
-	static const std::string users_filename;
-	static const std::string games_filename;
 	QByteArray data;
 	QString server_ip_address;
 	quint16 port;
@@ -24,13 +22,10 @@ private slots:
 	void readResponse();
 
 public:
-	static const std::string directory_with_games;
-
 	http_connection();
 
 	bool createUser(const std::string name, const std::string password, const uint8_t age);
 	bool createGame(const std::string name, const std::string description, const uint8_t age_restriction, const double price);
-	void addGameFiles(const std::string name, const std::filesystem::path directory_with_files);
 
 	std::set<std::string> getAllGames();
 	std::string getGameDescription(const std::string name);

@@ -6,24 +6,19 @@
 #include <string>
 #include <charconv>
 
-//#include "sha256.h"
 #include "Connection.h"
 
-
-const std::string Connection::users_filename = "C:\\server\\DataBase\\usersData.txt";
-const std::string Connection::games_filename = "C:\\server\\DataBase\\gamesData.txt";
-const std::string Connection::directory_with_games = "C:\\server\\DataBase\\gameFiles";
-
+std::string Connection::users_filename;
+std::string Connection::games_filename;
+std::string Connection::directory_with_games;
+std::string Connection::address;
 
 // create ________
 bool Connection::createUser(const std::string name, const std::string password, const uint8_t age) {
     std::ofstream work_with_file(users_filename, std::ios::app);
     work_with_file.write(name.c_str(), name.size());
     work_with_file << std::endl;
-    //SHA256* cipher = new SHA256();
-    //std::string encrypted_password = cipher->hash(password);
-    //work_with_file.write(encrypted_password.c_str(), encrypted_password.size());
-    //delete cipher;
+    work_with_file << password;
     work_with_file << std::endl;
     work_with_file << static_cast<int>(age) << std::endl;
     work_with_file << 0 << std::endl; // строчка для баланса
@@ -219,9 +214,9 @@ void Connection::updateGameName(const std::string name, const std::string new_na
     work_with_file.read(&game_data[0], wwf_tellg);
     work_with_file.close();
 
-    size_t pos_edit = game_data.find(name);
+    size_t pos_edit = game_data.find(name + "\n");
     if (pos_edit == std::string::npos)
-        throw std::exception((std::string(__func__) + "Игра не найдена").c_str());
+        throw std::exception((std::string(__func__) + " - Game not found").c_str());
     game_data.replace(pos_edit, name.size(), new_name);
 
     work_with_file.open(games_filename, std::ios::out);
@@ -521,4 +516,21 @@ void Connection::deleteFavoriteGameFromUser(const std::string user_name, const s
 	work_with_file.open(users_filename, std::ios::out);
 	work_with_file.write(&user_data[0], strlen(&user_data[0]));
 	work_with_file.close();
+}
+
+void Connection::init() {
+	std::string line;
+	std::ifstream settings("settings.txt");
+	if (!settings.is_open())
+		throw std::exception("file settings is not open");
+	
+	std::getline(settings, line);
+	Connection::users_filename = line;
+	std::getline(settings, line);
+	Connection::games_filename = line;
+	std::getline(settings, line);
+	Connection::directory_with_games = line;
+	std::getline(settings, line);
+	Connection::address = line;
+	settings.close();
 }

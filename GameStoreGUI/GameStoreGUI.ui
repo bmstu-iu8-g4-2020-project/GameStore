@@ -182,7 +182,6 @@
     </property>
     <addaction name="mnu_create_game"/>
     <addaction name="mnu_update_game"/>
-    <addaction name="mnu_update_file"/>
    </widget>
    <addaction name="mnu_menu"/>
    <addaction name="menu"/>

@@ -1,11 +1,14 @@
 #include "CreateUserDialog.h"
 #include <QMessageBox>
+#include "sha256.h"
 
 CreateUserDialog::CreateUserDialog(QWidget *parent, http_connection *conn)
 	: QDialog(parent)
 {
 	setlocale(LC_ALL, "Russian");
 	this->setFixedSize(310, 310);
+
+	this->conn = conn;
 	ui.setupUi(this);
 
 	QObject::connect(ui.btn_Save, &QPushButton::clicked, this, &CreateUserDialog::click_save);
@@ -45,9 +48,11 @@ void CreateUserDialog::click_save() {
 		QMessageBox(QMessageBox::Warning, QString::fromWCharArray(L"Ошибка"), QString::fromWCharArray(L"Возраст введен неверно"), QMessageBox::NoButton, this).exec();
 		return;
 	}
-
+	SHA256* cipher = new SHA256();
+	std::string encrypted_password = cipher->hash(Password);
+	delete cipher;
 	try {
-		conn->createUser(Login, Password, Age);
+		conn->createUser(Login, encrypted_password, Age);
 		this->accept();
 	}
 	catch (std::exception& error) {

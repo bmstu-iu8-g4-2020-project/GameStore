@@ -21,7 +21,6 @@ private slots:
 	void click_create_user();
 	void click_create_game();
 	void click_update_game();
-	void click_add_files();
 
 	void game_selected(QListWidgetItem* item);
 	void click_open();

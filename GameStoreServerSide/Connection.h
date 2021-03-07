@@ -6,11 +6,12 @@
 
 class Connection {
 private:
-	static const std::string users_filename;
-	static const std::string games_filename;
+	static std::string users_filename;
+	static std::string games_filename;
+	static std::string directory_with_games;
+	static std::string address;
 
 public:
-	static const std::string directory_with_games;
 
 	bool createUser(const std::string name, const std::string password, const uint8_t age);
 	bool createGame(const std::string name, const std::string description, const uint8_t age_restriction, const double price);
@@ -44,4 +45,5 @@ public:
 	void deleteFavoriteGameFromUser(const std::string user_name, const std::string game_name);
 	void deleteGameFromUser(const std::string user_name, const std::string game_name);
 
+	static void init();
 };
